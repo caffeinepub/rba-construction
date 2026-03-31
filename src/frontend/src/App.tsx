@@ -902,20 +902,6 @@ function About() {
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
 function Projects() {
-  const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const total = PROJECTS.length;
-
-  const prev = () => setCurrent((c) => (c - 1 + total) % total);
-  const next = () => setCurrent((c) => (c + 1) % total);
-
-  useEffect(() => {
-    if (paused) return;
-    const id = setInterval(() => setCurrent((c) => (c + 1) % total), 4000);
-    return () => clearInterval(id);
-  }, [paused, total]);
-
-  // Visible count based on screen (handled via CSS)
   return (
     <section
       id="projects"
@@ -932,89 +918,39 @@ function Projects() {
           <div className="w-16 h-1 bg-brand mx-auto mt-4" />
         </div>
 
-        <div
-          className="relative"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {/* Slider track */}
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${current * 100}%)` }}
-            >
-              {PROJECTS.map((proj, i) => (
-                <div
-                  key={proj.name}
-                  className="w-full flex-shrink-0 px-2 sm:w-1/2 lg:w-1/3"
-                  style={{ minWidth: "100%" }}
-                  data-ocid={`projects.item.${i + 1}`}
-                >
-                  <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 mx-2">
-                    <div className="relative overflow-hidden h-48">
-                      <img
-                        src={proj.img}
-                        alt={`${proj.name} – ${proj.location}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <span className="absolute top-3 left-3 bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-                        {proj.tag}
-                      </span>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm uppercase tracking-wide mb-1">
-                        {proj.name}
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mb-4">
-                        <MapPin className="w-3 h-3" /> {proj.location}, Tamil
-                        Nadu
-                      </p>
-                      <button
-                        type="button"
-                        className="w-full flex items-center justify-center gap-1 text-brand text-xs font-bold uppercase tracking-wider border border-brand rounded py-2 hover:bg-brand hover:text-white transition-colors duration-200"
-                        data-ocid={`projects.button.${i + 1}`}
-                      >
-                        View Project <ArrowRight className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Prev/Next arrows */}
-          <button
-            type="button"
-            onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white dark:bg-gray-800 shadow-md rounded-full p-2 hover:bg-brand hover:text-white transition-colors duration-200"
-            data-ocid="projects.pagination_prev"
-            aria-label="Previous project"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white dark:bg-gray-800 shadow-md rounded-full p-2 hover:bg-brand hover:text-white transition-colors duration-200"
-            data-ocid="projects.pagination_next"
-            aria-label="Next project"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Dot indicators */}
-        <div className="flex justify-center gap-2 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {PROJECTS.map((proj, i) => (
-            <button
+            <div
               key={proj.name}
-              type="button"
-              onClick={() => setCurrent(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === current ? "bg-brand scale-125" : "bg-gray-300 dark:bg-gray-600 hover:bg-brand/50"}`}
-              aria-label={`Go to slide ${i + 1}`}
-              data-ocid={"projects.toggle"}
-            />
+              className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300"
+              data-ocid={`projects.item.${i + 1}`}
+            >
+              <div className="relative overflow-hidden h-48">
+                <img
+                  src={proj.img}
+                  alt={`${proj.name} – ${proj.location}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <span className="absolute top-3 left-3 bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
+                  {proj.tag}
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm uppercase tracking-wide mb-1">
+                  {proj.name}
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mb-4">
+                  <MapPin className="w-3 h-3" /> {proj.location}
+                </p>
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-center gap-1 text-brand text-xs font-bold uppercase tracking-wider border border-brand rounded py-2 hover:bg-brand hover:text-white transition-colors duration-200"
+                  data-ocid={`projects.button.${i + 1}`}
+                >
+                  View Project <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
           ))}
         </div>
       </div>
